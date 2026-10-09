@@ -48,9 +48,8 @@ public class Library {
     public List<Book> search(String keyword) {
         List<Book> result = new ArrayList<>();
         for (Book book : books) {
-            // BUG(考核): 这里用了 equals 全等匹配，只有书名与关键字完全相同时才会命中。
-            // 题目要求"书名包含关键字"，应使用 contains。需求见《01-题目文档.md》任务一。
-            if (book.getName().equals(keyword)) {
+            // 任务一已修复：按书名 contains 匹配（区分大小写，不匹配作者）。
+            if (book.getName().contains(keyword)) {
                 result.add(book);
             }
         }
@@ -91,5 +90,18 @@ public class Library {
         }
         book.setBorrowed(false);
         return "归还成功";
+    }
+
+    /**
+     * 删除图书：按编号查找，存在则从列表中移除并返回"删除成功"，不存在返回"图书编号不存在"。
+     * 编号只增不减，删除不回收编号（nextId 不受影响）。
+     */
+    public String deleteById(int id) {
+        Book book = findById(id);
+        if (book == null) {
+            return "图书编号不存在";
+        }
+        books.remove(book);
+        return "删除成功";
     }
 }
